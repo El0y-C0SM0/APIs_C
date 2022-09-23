@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "VETORES_E_MATRIZES.h"
+#include "ARRAY_LIST.h"
 
 #define TAM 3
 
