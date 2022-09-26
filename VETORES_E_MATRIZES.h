@@ -56,7 +56,7 @@ void inicia_vetor(int *vetor, int tam) {
 	Recebe como parametro o vetor, o tamanho e um valor.
     inicializa o vetor de tamanho tam com o valor passado.
 */
-void preenche_veto(int *vetor, int tam, int valor) {
+void preenche_vetor(int *vetor, int tam, int valor) {
     for(int i = 0; i < tam; i++)
         vetor[i] = valor;
 }

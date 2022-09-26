@@ -50,6 +50,14 @@ ArrayList* criar_lista(int tam, int janela) {
 }
 
 /**
+ * Recebe como parametro: uma lista.
+ * Retorna o tamanho dela.
+*/
+int tamanho(ArrayList *lista) {
+    return (lista == NULL) ? 0 : lista->tamanho;
+}
+
+/**
  * Recebe como parametro: uma lista
  * verifica se lista está vazia
  * @return TRUE se está vazia
@@ -57,14 +65,6 @@ ArrayList* criar_lista(int tam, int janela) {
 */
 int esta_vazia(ArrayList *lista) {
     return (tamanho(lista) == 0);
-}
-
-/**
- * Recebe como parametro: uma lista.
- * Retorna o tamanho dela.
-*/
-int tamanho(ArrayList *lista) {
-    return (lista == NULL) ? 0 : lista->tamanho;
 }
 
 /**
@@ -142,7 +142,7 @@ int inserir_posicao(ArrayList *lista, int item, int pos) {
             return FALSE;    
     }
 
-    if(pos < 0 || pos >= lista->limite)
+    if(pos < 0 || pos > tamanho(lista))
         return ERR_INDICE_INVALIDO;
     
     for(int i = lista->tamanho; i > pos; i--) 
@@ -195,7 +195,7 @@ int remover_posicao(ArrayList *lista, int pos) {
     if(esta_vazia(lista)) 
         return ERR_LISTA_VAZIA;
     
-    if(pos < 0 || pos >= lista->limite) 
+    if(pos < 0 || pos >= tamanho(lista)) 
         return ERR_INDICE_INVALIDO;
 
     lista->tamanho--;
@@ -206,60 +206,59 @@ int remover_posicao(ArrayList *lista, int pos) {
     return TRUE;
 }
  
-/** Recupera de @code{list} o @code{item} na posição @code{pos}
- *  @param list Lista que contém o @code{item}.
+/** Recupera de @code{lista} o @code{item} na posição @code{pos}
+ *  @param lista Lista que contém o @code{item}.
  *  @param pos  Posição na qual está o @code{item}.
  *  @return ERR_INDICE_INVALIDO se houve erro ou o item. */
-int obter_item(ArrayList *list, int pos) {
-    return (pos < 0 || pos >= list->limite) ? ERR_INDICE_INVALIDO : list->items[pos];
+int obter_item(ArrayList *lista, int pos) {
+    return (pos < 0 || pos >= tamanho(lista)) ? ERR_INDICE_INVALIDO : lista->items[pos];
 }
 
-/** Atribui novo @code{item} à posição @code{pos} de @code{list}
- *  @param list Lista que contém os items.
+/** Atribui novo @code{item} à posição @code{pos} de @code{lista}
+ *  @param lista Lista que contém os items.
  *  @param pos  Posição na qual será atribuído o @code{item}.
- *  @param item Novo item que sera atribuído a @code{list}
+ *  @param item Novo item que sera atribuído a @code{lista}
  *  @return ERR_INDICE_INVALIDO se posição @code{pos} não é válida (@code{pos} < 0 || @code{pos} >= tamanho).
  *          TRUE se for possível. */
-int atribuir_valor(ArrayList *list, int pos, int item) {
-    if(pos < 0 || pos >= list->limite) 
+int atribuir_valor(ArrayList *lista, int pos, int item) {
+    if(pos < 0 || pos >= tamanho(lista)) 
         return ERR_INDICE_INVALIDO;
 
-    list->items[pos] = item;
+    lista->items[pos] = item;
 
     return TRUE;
 }
 
-/** Acha a primeira posição de item @code{item} na lista  @code{list}
- * @param list Lista que contém os items.
+/** Acha a primeira posição de item @code{item} na lista  @code{lista}
+ * @param lista Lista que contém os items.
  * @param item É o item que deseja achar a posição
  * @return A posição do item @code{item} 
  *         ou N_ACHOU (-1) se o item não existe ou não foi possivel acha-lo*/
-int obtem_posicao(ArrayList *list, Item item) {
+int obtem_posicao(ArrayList *lista, Item item) {
     int posicao = N_ACHOU;
 
-    for(int i = 0; i < list->tamanho; i++) {
-        if(list->items[i] == item)
+    for(int i = 0; i < lista->tamanho; i++) {
+        if(lista->items[i] == item)
             posicao = i;
     }
 
     return (posicao == -1) ? N_ACHOU : posicao;
 }
 
-/** Acha a ultima posição de item @code{item} na lista  @code{list}
- * @param list Lista que contém os items.
+/** Acha a ultima posição de item @code{item} na lista  @code{lista}
+ * @param lista Lista que contém os items.
  * @param item É o item que deseja achar a posição
  * @return A posição do item @code{item} 
  *         ou N_ACHOU (-1) se o item não existe ou não foi possivel acha-lo*/
-int obtem_ultima_posicao(ArrayList *list, Item item) {
+int obtem_ultima_posicao(ArrayList *lista, Item item) {
     int posicao = -1;
 
-    for(int i = list->tamanho; i >= 0; i--) {
-        if(list->items[i] == item)
+    for(int i = lista->tamanho; i >= 0; i--) {
+        if(lista->items[i] == item)
             posicao = i;
     }
 
     return (posicao == -1) ? N_ACHOU : posicao;
 }
-
 
 #endif
