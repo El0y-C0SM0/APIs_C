@@ -11,6 +11,7 @@
 #define TRUE 1
 #define ERR_INDICE_INVALIDO 2
 #define ERR_LISTA_VAZIA 3
+#define ERR_SEM_ESPACO 4
 #define N_ACHOU -1
 
 typedef int Item;
@@ -33,20 +34,20 @@ ArrayList* criar_lista(int tam, int janela) {
     ArrayList *lista = (ArrayList*) malloc(sizeof(ArrayList));
     
     // se há memória
-    if (lista != NULL) {
-        lista->tamanho = 0;                  // lista vazia
-        lista->limite = tam;    // capacidade inicial
-        lista->janela = janela;
-        // cria vetor para armazenar os items de dados
-        lista->items = (int*) malloc(lista->limite * sizeof(Item));
+    if (lista == NULL) 
+        return NULL;    
 
-        if (lista->items == NULL) // não há memória
-            return NULL;
+    
+    lista->tamanho = 0;                  // lista vazia
+    lista->limite = tam;    // capacidade inicial
+    lista->janela = janela;
+    // cria vetor para armazenar os items de dados
+    lista->items = (int*) malloc(lista->limite * sizeof(Item));
 
-        return lista;                        // retorna a lista criada e inicializada
-    }
-    else // não há memória
+    if (lista->items == NULL) // não há memória
         return NULL;
+
+    return lista;                        // retorna a lista criada e inicializada
 }
 
 /**
@@ -132,18 +133,23 @@ int inserir_fim(ArrayList *lista, int item) {
  *          FALSE se não houver memória 
  *          ERR_INDICE_INVALIDO se posição @code{pos} não é válida (@code{pos} < 0 || @code{pos} >= tamanho)
  */
-int inserir_posicao(ArrayList *lista, int item, int pos) {
+int inserir_posicao(ArrayList *lista, int item, int pos, int *erro) {
+    *err = FALSE;
     if(lista->tamanho == lista->limite) {
         if(expansivel(lista)) {
             lista->limite += lista->janela;
             lista->items = (Item*) realloc(lista->items, lista->janela * sizeof(Item));
         }
-        else 
+        else {
+            *err = ERR_SEM_ESPACO;
             return FALSE;    
+        }
     }
 
-    if(pos < 0 || pos > tamanho(lista))
-        return ERR_INDICE_INVALIDO;
+    if(pos < 0 || pos > tamanho(lista)) {
+        *err = ERR_INDICE_INVALIDO
+        return FALSE;
+    }
     
     for(int i = lista->tamanho; i > pos; i--) 
         lista->items[i] = lista->items[i - 1];
