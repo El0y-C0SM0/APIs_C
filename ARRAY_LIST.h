@@ -134,20 +134,20 @@ int inserir_fim(ArrayList *lista, int item) {
  *          ERR_INDICE_INVALIDO se posição @code{pos} não é válida (@code{pos} < 0 || @code{pos} >= tamanho)
  */
 int inserir_posicao(ArrayList *lista, int item, int pos, int *erro) {
-    *err = FALSE;
+    *erro = FALSE;
     if(lista->tamanho == lista->limite) {
         if(expansivel(lista)) {
             lista->limite += lista->janela;
             lista->items = (Item*) realloc(lista->items, lista->janela * sizeof(Item));
         }
         else {
-            *err = ERR_SEM_ESPACO;
+            *erro = ERR_SEM_ESPACO;
             return FALSE;    
         }
     }
 
     if(pos < 0 || pos > tamanho(lista)) {
-        *err = ERR_INDICE_INVALIDO
+        *erro = ERR_INDICE_INVALIDO;
         return FALSE;
     }
     
