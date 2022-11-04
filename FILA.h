@@ -6,8 +6,7 @@
 
 #define FALSE 0
 #define TRUE 1
-#define ERR_INDICE_INVALIDO 2
-#define ERR_LISTA_VAZIA 3
+#define ERR_FILA_VAZIA 2
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,17 +20,18 @@ typedef struct Tno {
 
 typedef struct {
     No *primeiro;
+    No *ultimo;
     int quant;
 } Fila;
 
-No *cria_no(Item valor, No *prox) {
+No *cria_no(Item valor) {
     No *novo = (No*) malloc(sizeof(No));
 
     if(novo == NULL) 
         return NULL;
 
     novo->item = valor;
-    novo->proximo = prox;
+    novo->proximo = NULL;
 
     return novo;
 }
@@ -47,12 +47,69 @@ Fila *criar_fila() {
     return novo;
 }
 
-int enfileirar();
+int esta_vazia(Fila *fila) {
+    return fila->quant == 0;
+}
 
-int desenfileirar();
+int tamanho(Fila *fila) {
+    return fila->quant;
+}
 
-int esvaziar();
+int enfileirar(Fila *fila, Item item) {
+    No *novo = cria_no(item);
 
-Item proximo_item();
+    if(novo == NULL)
+        return FALSE;
+
+    if(esta_vazia(fila)) 
+        fila->primeiro = novo;
+    else 
+        fila->ultimo->proximo = novo;
+    fila->ultimo = novo;
+
+    fila->quant++;
+
+    return TRUE;
+}
+
+int desenfileirar(Fila *fila, Item item_removido) {
+    if(esta_vazia(fila))
+        return ERR_FILA_VAZIA;
+
+    No *removido = fila->primeiro;
+    item_removido = removido->item;
+
+    fila->quant--;
+
+    free(removido);
+
+    return FALSE;
+}
+
+int esvaziar(Fila *fila) {
+    if(esta_vazia(fila))
+        return TRUE;
+
+    No *removido = fila->primeiro;
+    fila->primeiro = removido->proximo;
+    fila->quant--;
+
+    free(removido);
+
+    int aux = esvaziar(fila);
+
+    if(aux) 
+        return TRUE;
+
+    return FALSE;
+}
+
+Item primeiro_item(Fila *fila) {
+    return fila->primeiro->item;
+}
+
+Item ultimo_item(Fila *fila) {
+    return fila->ultimo->item;
+}
 
 #endif
